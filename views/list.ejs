@@ -2,7 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
+
     <title> To Do List</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -12,22 +15,28 @@
         <h1 style = "color:blue">It's a <%= kindOfDay %> List </h1>
     <% } %> -->
 
-    <h1> <%= kindOfDay %></h1>
+    <div class="box" id="heading">
+        <h1> <%= kindOfDay %></h1>
+    </div>
 
-    <ul>
-        <li>Buy food</li>
-        <li>Cook food</li>
-        <li>Eat food</li>
+   <div class="box" >
         <!-- <li> <%= newListItems %></li> -->
        <% for(var i=0;i< newListItems.length;i++){%>
-           <li> <%= newListItems[i] %> </li>
+          <div class="item"> 
+            <input type="checkbox">
+            <p> <%= newListItems[i] %> </p>
+          </div>
         <% }%>
-    </ul>
+     
 
-
-    <form action="/" method="POST">
-        <input type="text" name="newValue">
-        <button type="submit" name="button">Add</button>
+    <form class="item" action="/" method="POST">
+        <input type="text" name="newValue" placeholder="New Item" autocomplete="off">
+        <button type="submit" name="button">+</button>
     </form>
+    </div>
+
+
+
+  
 </body>
 </html>

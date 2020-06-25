@@ -4,10 +4,11 @@ const ejs = require('ejs')
 
 const app = express();
 
-var items = [];
+var items = ['Go shopping','Do homework','Get the trash'];
 
 app.use(bodyParser.urlencoded({ extended: true}));
 
+app.use(express.static("public"))
 app.set('view engine', 'ejs');
 
 app.get("/", function (req,res) {
