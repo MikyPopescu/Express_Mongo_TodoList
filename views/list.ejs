@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
+<%- include('header'); -%>
 
-    <title> To Do List</title>
+<div class="box" id="heading">
+        <h1> <%= listTitle %></h1>
+</div>
 
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-
-<body>
-    <!-- <% if(kindOfDay === "Saturday" || kindOfDay ==="Sunday"){ %>
-        <h1 style = "color:purple">It's a <%= kindOfDay %> List </h1>
-    <% } else { %>
-        <h1 style = "color:blue">It's a <%= kindOfDay %> List </h1>
-    <% } %> -->
-
-    <div class="box" id="heading">
-        <h1> <%= kindOfDay %></h1>
-    </div>
-
-   <div class="box" >
+<div class="box" >
         <!-- <li> <%= newListItems %></li> -->
        <% for(var i=0;i< newListItems.length;i++){%>
           <div class="item"> 
@@ -29,14 +14,10 @@
         <% }%>
      
 
-    <form class="item" action="/" method="POST">
-        <input type="text" name="newValue" placeholder="New Item" autocomplete="off">
-        <button type="submit" name="button">+</button>
-    </form>
-    </div>
+     <form class="item" action="/" method="POST">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <button type="submit" name="list" value="<%= listTitle %>">+</button>
+     </form>
+</div>
 
-
-
-  
-</body>
-</html>
+<%- include('footer'); -%>
