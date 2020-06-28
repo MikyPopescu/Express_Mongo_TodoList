@@ -30,15 +30,18 @@ const item2 = new Item({
     name:"Hit the + to add more items"
 });
 
-
 const item3 = new Item({
     name:"<----- Hit this to delete an item"
 });
 
 const defaultItems = [item1,item2,item3];
 
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+};
 
-
+const List = mongoose.model("List",listSchema);
 
 app.get("/", function (req,res) {
     
@@ -55,25 +58,61 @@ app.get("/", function (req,res) {
         res.redirect("/");
        }
        else{
-          res.render('list', {listTitle: "Today", newListItems: foundItems});  
+          res.render('List', {listTitle: "Today", newListItems: foundItems});  
        }
       
     });
    
 });
 
+app.get("/:customListName", function(req,res){
+    const customListName = req.params.customListName;
+    List.findOne({name: customListName},function(err,foundList){
+        if(!err){
+            if(!foundList){
+              //create new list
+              const list = new List({
+                name: customListName,
+                items: defaultItems
+            });
+            list.save();
+            res.redirect("/" + customListName);
+            }
+            else{
+            //show existing list
+              res.render("list",{listTitle: foundList.name, newListItems: foundList.items});
+            }
+        }
+    });
+
+  
+});
 
 app.post("/", function (req, res) {
     //user input
     const itemName = req.body.newItem;
+    //button
+    const listName = req.body.list;
+
     //conversion to mongoose
     const item = new Item({
         name: itemName
     });
-    //save
-    item.save();
 
-    res.redirect("/");
+    if(listName === "Today"){
+        //save
+         item.save();
+
+        res.redirect("/");
+    }
+    else{
+        //new item from custom list
+        List.findOne({name: listName}, function(err,foundList){
+            foundList.items.push(item);
+            foundList.save();
+            res.redirect("/"+ listName);
+        });
+    }
 });
 
 
@@ -93,20 +132,20 @@ app.post("/delete",function(req,res){
 });
 
 
-app.get("/work",function(req,res){
-    res.render("list",{listTitle: "Work List",newListItems: workItems});
-});
+// app.get("/work",function(req,res){
+//     res.render("list",{listTitle: "Work List",newListItems: workItems});
+// });
 
-app.post("/work",function(req,res){
-    let item = req.body.newItem;
-    workItems.push(item);
-    res.redirect("/work")
-});
+// app.post("/work",function(req,res){
+//     let item = req.body.newItem;
+//     workItems.push(item);
+//     res.redirect("/work")
+// });
 
 
-app.get("/about", function(req,res){
-    res.render("about");
-});
+// app.get("/about", function(req,res){
+//     res.render("about");
+// });
 
 app.listen(8080, function () {
     console.log("Server started on 8080");  
