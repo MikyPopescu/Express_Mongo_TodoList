@@ -66,6 +66,7 @@ app.get("/", function (req,res) {
 });
 
 app.get("/:customListName", function(req,res){
+//  const customListName = _.capitalize(req.params.customListName);
     const customListName = req.params.customListName;
     List.findOne({name: customListName},function(err,foundList){
         if(!err){
@@ -118,34 +119,29 @@ app.post("/", function (req, res) {
 
 app.post("/delete",function(req,res){
     const checkedItemId = req.body.checkbox;
+    const listName = req.body.listName;
 
-    Item.findByIdAndRemove(checkedItemId,function(err){
-        if(!err){
-            console.log("Succesfully deleted the checked item!");
-            res.redirect("/");
-        }
-        else{
-            console.log(err);
-            
-        }
-    })
+    if(listName === "Today"){
+        Item.findByIdAndRemove(checkedItemId,function(err){
+            if(!err){
+                console.log("Succesfully deleted the checked item!");
+                res.redirect("/");
+            }
+            else{
+                console.log(err);
+            }
+        })
+    }
+    else{
+        List.findOneAndUpdate({name: listName},{$pull: {items:{_id:checkedItemId}}},function(err,foundList){
+            if(!err){
+                res.redirect("/"+listName);
+            }
+        })
+    }
 });
 
 
-// app.get("/work",function(req,res){
-//     res.render("list",{listTitle: "Work List",newListItems: workItems});
-// });
-
-// app.post("/work",function(req,res){
-//     let item = req.body.newItem;
-//     workItems.push(item);
-//     res.redirect("/work")
-// });
-
-
-// app.get("/about", function(req,res){
-//     res.render("about");
-// });
 
 app.listen(8080, function () {
     console.log("Server started on 8080");  
