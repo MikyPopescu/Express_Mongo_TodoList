@@ -11,8 +11,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todolistDB",{useUnifiedTopology:true, useNewUrlParser:true});
-
+//mongoose.connect("mongodb://localhost:27017/todolistDB",{useUnifiedTopology:true, useNewUrlParser:true});
+mongoose.connect("mongodb+srv://admin-miky:admin-miky@cluster0-4lcoe.mongodb.net/todolistDB?retryWrites=true&w=majority",{useUnifiedTopology:true, useNewUrlParser:true});
 //schema
 const itemsSchema = {
     name: String
@@ -116,7 +116,6 @@ app.post("/", function (req, res) {
     }
 });
 
-
 app.post("/delete",function(req,res){
     const checkedItemId = req.body.checkbox;
     const listName = req.body.listName;
@@ -140,8 +139,6 @@ app.post("/delete",function(req,res){
         })
     }
 });
-
-
 
 app.listen(8080, function () {
     console.log("Server started on 8080");  
