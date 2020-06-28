@@ -64,17 +64,32 @@ app.get("/", function (req,res) {
 
 
 app.post("/", function (req, res) {
-    const item = req.body.newItem;
-    //console.log(req.body);
-    if(req.body.list === "work"){
-        workItems.push(item);
-        res.redirect('/work');
-    }
-   else{
-    //console.log(item);
-     items.push(item);
-     res.redirect('/');
-   } 
+    //user input
+    const itemName = req.body.newItem;
+    //conversion to mongoose
+    const item = new Item({
+        name: itemName
+    });
+    //save
+    item.save();
+
+    res.redirect("/");
+});
+
+
+app.post("/delete",function(req,res){
+    const checkedItemId = req.body.checkbox;
+
+    Item.findByIdAndRemove(checkedItemId,function(err){
+        if(!err){
+            console.log("Succesfully deleted the checked item!");
+            res.redirect("/");
+        }
+        else{
+            console.log(err);
+            
+        }
+    })
 });
 
 
